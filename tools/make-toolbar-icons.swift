@@ -1,6 +1,6 @@
 // Draws Airlock's toolbar icons: a simplified, bold version of the main icon with no
-// background (the door frame, its seam, and the three session colors), drawn on a
-// 32-unit grid at 16, 32 and 64 px so strokes land on whole pixels.
+// background (an arched door filling the icon, its seam, and the three session colors
+// as its threshold), drawn on a 32-unit grid at 16, 32 and 64 px.
 //   toolbar-dark-*.png  dark frame, for light Firefox themes
 //   toolbar-light-*.png light frame, for dark Firefox themes
 // Usage: swift make-toolbar-icons.swift <icons folder>
@@ -30,32 +30,35 @@ func draw(size: Int, frameColor: NSColor) -> NSBitmapImageRep {
     t.scaleX(by: s, yBy: -s)
     t.concat()
 
-    // Session colors across the top.
-    for (i, c) in sessionColors.enumerated() {
-        c.setFill()
-        NSBezierPath(roundedRect: NSRect(x: 5 + CGFloat(i) * 8, y: 3, width: 6, height: 4), xRadius: 2, yRadius: 2).fill()
-    }
-
-    // Door: an arched doorway (a plain square with a center line reads as a pause button),
-    // lightly tinted inside, thick frame, straight center seam (a zigzag reads as "S" at 16 px).
+    // Door: an arched doorway filling the whole icon (a plain square with a center line
+    // reads as a pause button), lightly tinted inside, with a straight center seam
+    // (a zigzag reads as "S" at 16 px).
     let door = NSBezierPath()
-    door.move(to: NSPoint(x: 8, y: 28))
-    door.line(to: NSPoint(x: 8, y: 20))
-    door.appendArc(withCenter: NSPoint(x: 16, y: 20), radius: 8, startAngle: 180, endAngle: 0, clockwise: false)
-    door.line(to: NSPoint(x: 24, y: 28))
-    door.close()
-    door.lineJoinStyle = .round
+    door.move(to: NSPoint(x: 5, y: 27))
+    door.line(to: NSPoint(x: 5, y: 14))
+    door.appendArc(withCenter: NSPoint(x: 16, y: 14), radius: 11, startAngle: 180, endAngle: 0, clockwise: false)
+    door.line(to: NSPoint(x: 27, y: 27))
     frameColor.withAlphaComponent(0.18).setFill()
     door.fill()
     door.lineWidth = 4
+    door.lineJoinStyle = .round
     frameColor.setStroke()
     door.stroke()
 
     let seam = NSBezierPath()
-    seam.move(to: NSPoint(x: 16, y: 13))
+    seam.move(to: NSPoint(x: 16, y: 4))
     seam.line(to: NSPoint(x: 16, y: 27))
-    seam.lineWidth = 2
+    seam.lineWidth = 2.5
     seam.stroke()
+
+    // Threshold: one solid bar along the bottom of the door, split into the session colors.
+    NSGraphicsContext.saveGraphicsState()
+    NSBezierPath(roundedRect: NSRect(x: 2, y: 25, width: 28, height: 6), xRadius: 2.5, yRadius: 2.5).addClip()
+    for (i, c) in sessionColors.enumerated() {
+        c.setFill()
+        NSRect(x: 2 + CGFloat(i) * 28 / 3, y: 25, width: 28 / 3 + 0.5, height: 6).fill()
+    }
+    NSGraphicsContext.restoreGraphicsState()
 
     NSGraphicsContext.restoreGraphicsState()
     return rep
