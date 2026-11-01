@@ -1,0 +1,54 @@
+{
+  "manifest_version": 2,
+  "name": "Airlock",
+  "version": "1.0.0",
+  "description": "Every new tab is its own sealed session, so several accounts on the same site never mix. A session's logins are erased when its last tab closes, unless you keep it.",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "airlock-tabs@addon",
+      "strict_min_version": "115.0",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
+    }
+  },
+  "icons": {
+    "48": "icons/icon-48.png",
+    "96": "icons/icon-96.png",
+    "128": "icons/icon-128.png"
+  },
+  "permissions": [
+    "<all_urls>",
+    "contextualIdentities",
+    "cookies",
+    "browsingData",
+    "tabs",
+    "menus",
+    "privacy",
+    "storage",
+    "webRequest",
+    "webRequestBlocking"
+  ],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": true
+  },
+  "browser_action": {
+    "default_title": "Airlock",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "48": "icons/icon-48.png",
+      "96": "icons/icon-96.png"
+    }
+  },
+  "options_ui": {
+    "page": "welcome.html",
+    "open_in_tab": true
+  },
+  "commands": {
+    "new-tab-same-session": {
+      "suggested_key": { "default": "Ctrl+Alt+T" },
+      "description": "New tab in the same airlock"
+    }
+  }
+}

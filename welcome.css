@@ -1,0 +1,72 @@
+:root {
+  --bg: #f5f5f7;
+  --card: #ffffff;
+  --fg: #1d1d1f;
+  --muted: #6e6e73;
+  --line: #d2d2d7;
+  --good: #1a7f37;
+  --warn: #b35900;
+  --accent: #0b6bcb;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1c1b22;
+    --card: #2b2a33;
+    --fg: #fbfbfe;
+    --muted: #a8a8b3;
+    --line: #52525e;
+    --good: #4ac26b;
+    --warn: #f0a050;
+    --accent: #5aa9ff;
+  }
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: 15px/1.5 -apple-system, system-ui, sans-serif;
+}
+main { max-width: 720px; margin: 0 auto; padding: 40px 16px 64px; }
+header { display: flex; align-items: center; gap: 16px; }
+h1 { margin: 0; font-size: 28px; }
+.lead { margin: 2px 0 0; color: var(--muted); }
+h2 { margin: 36px 0 12px; font-size: 18px; }
+.steps { padding: 0; list-style: none; counter-reset: step; }
+.steps li {
+  counter-increment: step;
+  position: relative;
+  margin-bottom: 10px;
+  padding: 14px 16px 14px 52px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: 16px;
+  top: 14px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 24px;
+}
+.steps p { margin: 4px 0 0; color: var(--muted); }
+.status { margin-left: 8px; font-size: 13px; font-weight: 600; }
+.status.good { color: var(--good); }
+.status.warn { color: var(--warn); }
+table { width: 100%; border-collapse: collapse; background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+td { padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: none; }
+td:first-child { white-space: nowrap; width: 1%; }
+kbd { font: 12px ui-monospace, monospace; padding: 2px 6px; border: 1px solid var(--line); border-radius: 4px; }
+.tip { padding: 12px 16px; background: var(--card); border-left: 3px solid var(--accent); border-radius: 6px; }
+.toggle { display: flex; gap: 8px; align-items: center; margin-top: 20px; font-weight: 600; }
+@media (max-width: 520px) {
+  td:first-child { white-space: normal; }
+}

@@ -1,0 +1,49 @@
+# Release: push a tag like v1.0.1 (matching "version" in manifest.json).
+# This lints, sends the new version to addons.mozilla.org for review and signing,
+# and attaches the package to a GitHub release. Users get it automatically once
+# Mozilla approves it.
+#
+# Needs two repository secrets from https://addons.mozilla.org/developers/addon/api/key/
+#   AMO_JWT_ISSUER, AMO_JWT_SECRET
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Tag must match manifest version
+        run: |
+          version=$(node -p "require('./manifest.json').version")
+          if [ "v$version" != "$GITHUB_REF_NAME" ]; then
+            echo "Tag $GITHUB_REF_NAME does not match manifest version $version" >&2
+            exit 1
+          fi
+
+      - name: Lint
+        run: npx --yes web-ext@8 lint --source-dir . --ignore-files "tools/**" "*.md"
+
+      - name: Build package
+        run: npx --yes web-ext@8 build --source-dir . --ignore-files "tools/**" "*.md" --artifacts-dir web-ext-artifacts --overwrite-dest
+
+      - name: Submit to addons.mozilla.org for signing
+        env:
+          WEB_EXT_API_KEY: ${{ secrets.AMO_JWT_ISSUER }}
+          WEB_EXT_API_SECRET: ${{ secrets.AMO_JWT_SECRET }}
+        run: npx --yes web-ext@8 sign --source-dir . --ignore-files "tools/**" "*.md" --channel listed --artifacts-dir web-ext-artifacts --approval-timeout 0
+
+      - name: GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" web-ext-artifacts/*.zip --title "Airlock $GITHUB_REF_NAME" --generate-notes

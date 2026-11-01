@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <section id="current">
+    <div class="row">
+      <span id="dot" class="dot"></span>
+      <input id="name" type="text" maxlength="40" title="Rename this airlock">
+    </div>
+    <label class="check">
+      <input id="keep" type="checkbox">
+      Keep this airlock (stay signed in after closing its tabs)
+    </label>
+  </section>
+  <p id="none" class="muted" hidden>This tab isn't in an airlock.</p>
+
+  <button id="newSame">New tab in this airlock <span class="key">⌥⌘T</span></button>
+  <button id="newIsolated">New airlock tab</button>
+
+  <section id="keptSection" hidden>
+    <h2>Kept airlocks</h2>
+    <ul id="keptList"></ul>
+  </section>
+
+  <hr>
+  <label class="check toggle">
+    <input id="auto" type="checkbox">
+    Give every new tab its own airlock
+  </label>
+  <a id="help" href="#">Setup &amp; help</a>
+
+  <script src="popup.js"></script>
+</body>
+</html>
