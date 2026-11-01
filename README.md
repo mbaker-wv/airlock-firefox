@@ -45,7 +45,9 @@ Package for submission (from this folder):
 zip -r ../Airlock-1.0.0.zip manifest.json background.js popup.html popup.css popup.js welcome.html welcome.css welcome.js icons LICENSE
 ```
 
-The icon is drawn by `tools/make-icon.swift`.
+The main icon is drawn by `tools/make-icon.swift`. The toolbar button uses simpler,
+bolder icons drawn at exact pixel sizes by `tools/make-toolbar-icons.swift`, with a
+light and a dark version so it stays clear on any Firefox theme.
 
 ## Publish on addons.mozilla.org
 
