@@ -1,4 +1,5 @@
-// Draws Airlock's icon as a 1024×1024 PNG: a sealed hatch on a teal rounded square.
+// Draws Airlock's icon as a 1024×1024 PNG: two sliding airlock doors meeting at an
+// interlocking seam, in a teal frame, with a green "sealed" light, on a dark rounded square.
 // Usage: swift make-icon.swift out.png   (then resize to icons/icon-48/96/128.png)
 
 import AppKit
@@ -16,33 +17,45 @@ func color(_ r: CGFloat, _ g: CGFloat, _ b: CGFloat, _ a: CGFloat = 1) -> NSColo
 
 // Background (fills more of the canvas than a macOS app icon, so it reads at toolbar size).
 let body = NSBezierPath(roundedRect: NSRect(x: 40, y: 40, width: 944, height: 944), xRadius: 210, yRadius: 210)
-NSGradient(starting: color(22, 190, 170), ending: color(12, 60, 110))!.draw(in: body, angle: -90)
+NSGradient(starting: color(37, 52, 76), ending: color(12, 18, 34))!.draw(in: body, angle: -90)
 
-let center = NSPoint(x: 512, y: 512)
-let white = color(255, 255, 255)
+// Door frame.
+let frameRect = NSRect(x: 252, y: 150, width: 520, height: 640)
+let frame = NSBezierPath(roundedRect: frameRect, xRadius: 130, yRadius: 130)
+frame.lineWidth = 44
+color(45, 212, 191).setStroke()
+frame.stroke()
 
-// Hatch door: soft fill plus a thick ring.
-color(255, 255, 255, 0.16).setFill()
-NSBezierPath(ovalIn: NSRect(x: center.x - 330, y: center.y - 330, width: 660, height: 660)).fill()
-let ring = NSBezierPath(ovalIn: NSRect(x: center.x - 330, y: center.y - 330, width: 660, height: 660))
-ring.lineWidth = 64
-white.setStroke()
-ring.stroke()
-
-// Locking wheel: four spokes and a hub.
-for angle in stride(from: 0.0, to: Double.pi, by: Double.pi / 2) {
-    let spoke = NSBezierPath()
-    spoke.move(to: NSPoint(x: center.x + cos(angle) * 210, y: center.y + sin(angle) * 210))
-    spoke.line(to: NSPoint(x: center.x - cos(angle) * 210, y: center.y - sin(angle) * 210))
-    spoke.lineWidth = 56
-    spoke.lineCapStyle = .round
-    spoke.stroke()
+// Two doors meeting at a zigzag seam, clipped to the inside of the frame.
+let inner = NSBezierPath(roundedRect: frameRect.insetBy(dx: 46, dy: 46), xRadius: 88, yRadius: 88)
+NSGraphicsContext.saveGraphicsState()
+inner.addClip()
+let teeth: [CGFloat] = [-46, 46, -46, 46, -46]
+func seam(_ shift: CGFloat) -> [NSPoint] {
+    teeth.enumerated().map { i, dx in
+        NSPoint(x: 512 + dx + shift,
+                y: frameRect.maxY - CGFloat(i) * frameRect.height / CGFloat(teeth.count - 1))
+    }
 }
-let wheel = NSBezierPath(ovalIn: NSRect(x: center.x - 210, y: center.y - 210, width: 420, height: 420))
-wheel.lineWidth = 44
-wheel.stroke()
-white.setFill()
-NSBezierPath(ovalIn: NSRect(x: center.x - 70, y: center.y - 70, width: 140, height: 140)).fill()
+let left = NSBezierPath()
+left.move(to: NSPoint(x: frameRect.minX, y: frameRect.maxY))
+seam(-10).forEach { left.line(to: $0) }
+left.line(to: NSPoint(x: frameRect.minX, y: frameRect.minY))
+left.close()
+color(226, 232, 240).setFill()
+left.fill()
+let right = NSBezierPath()
+right.move(to: NSPoint(x: frameRect.maxX, y: frameRect.maxY))
+seam(10).forEach { right.line(to: $0) }
+right.line(to: NSPoint(x: frameRect.maxX, y: frameRect.minY))
+right.close()
+color(186, 198, 214).setFill()
+right.fill()
+NSGraphicsContext.restoreGraphicsState()
+
+// "Sealed" light above the door.
+color(74, 222, 128).setFill()
+NSBezierPath(ovalIn: NSRect(x: 482, y: 830, width: 60, height: 60)).fill()
 
 NSGraphicsContext.restoreGraphicsState()
 try! rep.representation(using: .png, properties: [:])!.write(to: URL(fileURLWithPath: CommandLine.arguments[1]))
