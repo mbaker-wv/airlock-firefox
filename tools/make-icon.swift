@@ -1,5 +1,6 @@
 // Draws Airlock's icon as a 1024×1024 PNG: two sliding airlock doors meeting at an
-// interlocking seam, in a teal frame, with a green "sealed" light, on a dark rounded square.
+// interlocking seam, in a teal frame, under a bar of three session colors (like
+// container tabs), on a dark rounded square.
 // Usage: swift make-icon.swift out.png   (then resize to icons/icon-48/96/128.png)
 
 import AppKit
@@ -20,7 +21,7 @@ let body = NSBezierPath(roundedRect: NSRect(x: 40, y: 40, width: 944, height: 94
 NSGradient(starting: color(37, 52, 76), ending: color(12, 18, 34))!.draw(in: body, angle: -90)
 
 // Door frame.
-let frameRect = NSRect(x: 252, y: 150, width: 520, height: 640)
+let frameRect = NSRect(x: 252, y: 130, width: 520, height: 620)
 let frame = NSBezierPath(roundedRect: frameRect, xRadius: 130, yRadius: 130)
 frame.lineWidth = 44
 color(45, 212, 191).setStroke()
@@ -53,9 +54,16 @@ color(186, 198, 214).setFill()
 right.fill()
 NSGraphicsContext.restoreGraphicsState()
 
-// "Sealed" light above the door.
-color(74, 222, 128).setFill()
-NSBezierPath(ovalIn: NSRect(x: 482, y: 830, width: 60, height: 60)).fill()
+// Session colors over the door, like the colored line on a container tab.
+let bar = [color(59, 130, 246), color(34, 197, 94), color(249, 115, 22)]
+let barRect = NSRect(x: 252, y: 812, width: 520, height: 56)
+let gap: CGFloat = 18
+let segment = (barRect.width - gap * CGFloat(bar.count - 1)) / CGFloat(bar.count)
+for (i, c) in bar.enumerated() {
+    c.setFill()
+    NSBezierPath(roundedRect: NSRect(x: barRect.minX + CGFloat(i) * (segment + gap), y: barRect.minY,
+                                     width: segment, height: barRect.height), xRadius: 28, yRadius: 28).fill()
+}
 
 NSGraphicsContext.restoreGraphicsState()
 try! rep.representation(using: .png, properties: [:])!.write(to: URL(fileURLWithPath: CommandLine.arguments[1]))
