@@ -5,6 +5,7 @@
 - **New name: Hatrack** (was Airlock), with a new top-hat icon. Sessions are now called "hats".
 - Friendlier, plainer wording on the welcome and setup page.
 - The setup tip now applies to any website, not just one vendor's tools.
+- Requires Firefox 140 or newer, the first version that understands Hatrack's "collects no data" declaration.
 
 ## 1.0.0
 
