@@ -8,6 +8,8 @@ and they'll never see each other. Close the tab and that login is gone.
 
 [**Get Airlock from Firefox Add-ons →**](https://addons.mozilla.org/firefox/addon/airlock-sessions/)
 
+![Three browser windows on the same site, each in its own colored Airlock session and signed into a different account](store/airlock-1280x800.png)
+
 ---
 
 ## Why I made this
@@ -99,7 +101,8 @@ It stays loaded until Firefox quits.
 | `popup.html/.js/.css` | The toolbar button's menu |
 | `welcome.html/.js/.css` | The setup and help page |
 | `icons/` | Store icon and toolbar icons (light and dark) |
-| `tools/` | Scripts that draw the icons (not part of the add-on) |
+| `store/` | The store and README image |
+| `tools/` | Scripts that draw the icons and store image (not part of the add-on) |
 
 ### Release a new version
 
