@@ -80,15 +80,28 @@ See [SECURITY.md](SECURITY.md) for how updates work and how to report a problem 
 
 ---
 
-## For developers
+## Who maintains Hatrack
+
+Hatrack is built and maintained by [mbaker-wv](https://github.com/mbaker-wv). Only the maintainer
+can change this repository or publish new versions on Firefox Add-ons. Every version is also
+reviewed and signed by Mozilla before it reaches you.
+
+**Found a bug or have an idea?** [Open an issue](https://github.com/mbaker-wv/hatrack/issues).
+For security problems, please use the private report described in [SECURITY.md](SECURITY.md).
+
+---
+
+## Maintainer notes
 
 <details>
-<summary>Try it, change it, release it</summary>
+<summary>How the code is organized, and how new versions are released</summary>
 
-### Try it without installing
+### Look at it without installing
+
+Anyone can try the code locally without changing anything here:
 
 1. Open `about:debugging#/runtime/this-firefox` in Firefox.
-2. Click **Load Temporary Add-on…** and pick `manifest.json` from this folder.
+2. Click **Load Temporary Add-on…** and pick `manifest.json` from a downloaded copy of this repository.
 
 It stays loaded until Firefox quits.
 
@@ -104,7 +117,7 @@ It stays loaded until Firefox quits.
 | `store/` | Store screenshots (also used in this README) |
 | `tools/` | Scripts that draw the icons and screenshots (not part of the add-on) |
 
-### Release a new version
+### Releasing a new version (maintainer only)
 
 1. Change `"version"` in `manifest.json` (for example `1.0.2`) and add a line to `CHANGELOG.md`.
 2. Commit, then tag and push:
@@ -116,8 +129,8 @@ It stays loaded until Firefox quits.
 3. GitHub checks the add-on, sends it to Mozilla for signing and review, and creates a
    GitHub release. Firefox updates everyone automatically once Mozilla approves it.
 
-This needs two repository secrets, `AMO_JWT_ISSUER` and `AMO_JWT_SECRET`, from
-addons.mozilla.org → **Tools → Manage API Keys**.
+This uses the maintainer's own Mozilla API keys, stored as private repository secrets
+(`AMO_JWT_ISSUER` and `AMO_JWT_SECRET`).
 
 To build the zip by hand instead:
 
@@ -129,4 +142,6 @@ zip -r ../Hatrack.zip manifest.json background.js popup.html popup.css popup.js 
 
 ## License
 
-MIT: free to use, change and share. See [LICENSE](LICENSE).
+The code is open source under the MIT license, so you're free to read it, learn from it and
+reuse it in your own projects. See [LICENSE](LICENSE). The Hatrack name, its listing on Firefox
+Add-ons and this repository remain the maintainer's.
