@@ -1,6 +1,5 @@
-// Draws Airlock's icon as a 1024×1024 PNG: two sliding airlock doors meeting at an
-// interlocking seam, in a teal frame, under a bar of three session colors (like
-// container tabs), on a dark rounded square.
+// Draws Hatrack's icon as a 1024×1024 PNG: a top hat whose band is split into the
+// three session colors (one hat, many accounts), on a dark navy rounded square.
 // Usage: swift make-icon.swift out.png   (then resize to icons/icon-48/96/128.png)
 
 import AppKit
@@ -16,54 +15,43 @@ func color(_ r: CGFloat, _ g: CGFloat, _ b: CGFloat, _ a: CGFloat = 1) -> NSColo
     NSColor(srgbRed: r / 255, green: g / 255, blue: b / 255, alpha: a)
 }
 
-// Background (fills more of the canvas than a macOS app icon, so it reads at toolbar size).
+// Background (fills more of the canvas than a macOS app icon, so it reads at small sizes).
 let body = NSBezierPath(roundedRect: NSRect(x: 40, y: 40, width: 944, height: 944), xRadius: 210, yRadius: 210)
-NSGradient(starting: color(37, 52, 76), ending: color(12, 18, 34))!.draw(in: body, angle: -90)
+NSGradient(starting: color(40, 52, 104), ending: color(12, 16, 40))!.draw(in: body, angle: -90)
 
-// Door frame.
-let frameRect = NSRect(x: 252, y: 130, width: 520, height: 620)
-let frame = NSBezierPath(roundedRect: frameRect, xRadius: 130, yRadius: 130)
-frame.lineWidth = 44
-color(45, 212, 191).setStroke()
-frame.stroke()
+let hatColor = color(241, 245, 249)
+let sessionColors = [color(59, 130, 246), color(34, 197, 94), color(249, 115, 22)]
 
-// Two doors meeting at a zigzag seam, clipped to the inside of the frame.
-let inner = NSBezierPath(roundedRect: frameRect.insetBy(dx: 46, dy: 46), xRadius: 88, yRadius: 88)
+// Soft shadow under the brim.
+color(0, 0, 0, 0.28).setFill()
+NSBezierPath(ovalIn: NSRect(x: 200, y: 232, width: 624, height: 70)).fill()
+
+// Crown: slightly wider at the top, rounded top corners.
+let crownBottom: CGFloat = 352, crownTop: CGFloat = 742
+let crown = NSBezierPath()
+crown.move(to: NSPoint(x: 322, y: crownBottom))
+crown.line(to: NSPoint(x: 302, y: crownTop - 46))
+crown.curve(to: NSPoint(x: 348, y: crownTop), controlPoint1: NSPoint(x: 300, y: crownTop - 16), controlPoint2: NSPoint(x: 318, y: crownTop))
+crown.line(to: NSPoint(x: 676, y: crownTop))
+crown.curve(to: NSPoint(x: 722, y: crownTop - 46), controlPoint1: NSPoint(x: 706, y: crownTop), controlPoint2: NSPoint(x: 724, y: crownTop - 16))
+crown.line(to: NSPoint(x: 702, y: crownBottom))
+crown.close()
+hatColor.setFill()
+crown.fill()
+
+// Band: the three session colors, clipped to the crown.
 NSGraphicsContext.saveGraphicsState()
-inner.addClip()
-let teeth: [CGFloat] = [-46, 46, -46, 46, -46]
-func seam(_ shift: CGFloat) -> [NSPoint] {
-    teeth.enumerated().map { i, dx in
-        NSPoint(x: 512 + dx + shift,
-                y: frameRect.maxY - CGFloat(i) * frameRect.height / CGFloat(teeth.count - 1))
-    }
+crown.addClip()
+let bandBottom = crownBottom, bandTop = crownBottom + 104
+for (i, c) in sessionColors.enumerated() {
+    c.setFill()
+    NSRect(x: 290 + CGFloat(i) * 148, y: bandBottom, width: 149, height: bandTop - bandBottom).fill()
 }
-let left = NSBezierPath()
-left.move(to: NSPoint(x: frameRect.minX, y: frameRect.maxY))
-seam(-10).forEach { left.line(to: $0) }
-left.line(to: NSPoint(x: frameRect.minX, y: frameRect.minY))
-left.close()
-color(226, 232, 240).setFill()
-left.fill()
-let right = NSBezierPath()
-right.move(to: NSPoint(x: frameRect.maxX, y: frameRect.maxY))
-seam(10).forEach { right.line(to: $0) }
-right.line(to: NSPoint(x: frameRect.maxX, y: frameRect.minY))
-right.close()
-color(186, 198, 214).setFill()
-right.fill()
 NSGraphicsContext.restoreGraphicsState()
 
-// Session colors over the door, like the colored line on a container tab.
-let bar = [color(59, 130, 246), color(34, 197, 94), color(249, 115, 22)]
-let barRect = NSRect(x: 252, y: 812, width: 520, height: 56)
-let gap: CGFloat = 18
-let segment = (barRect.width - gap * CGFloat(bar.count - 1)) / CGFloat(bar.count)
-for (i, c) in bar.enumerated() {
-    c.setFill()
-    NSBezierPath(roundedRect: NSRect(x: barRect.minX + CGFloat(i) * (segment + gap), y: barRect.minY,
-                                     width: segment, height: barRect.height), xRadius: 28, yRadius: 28).fill()
-}
+// Brim.
+hatColor.setFill()
+NSBezierPath(roundedRect: NSRect(x: 172, y: 292, width: 680, height: 76), xRadius: 38, yRadius: 38).fill()
 
 NSGraphicsContext.restoreGraphicsState()
 try! rep.representation(using: .png, properties: [:])!.write(to: URL(fileURLWithPath: CommandLine.arguments[1]))

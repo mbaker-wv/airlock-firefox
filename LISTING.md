@@ -1,13 +1,13 @@
 # Store listing
 
 The text used on the add-on's page at
-[addons.mozilla.org/firefox/addon/airlock-sessions](https://addons.mozilla.org/firefox/addon/airlock-sessions/).
+[addons.mozilla.org/firefox/addon/hatrack](https://addons.mozilla.org/firefox/addon/hatrack/).
 Kept here so it's easy to update and reuse.
 
-**Name:** Airlock
-**Web address:** `airlock-sessions`
+**Name:** Hatrack
+**Web address:** `hatrack`
 **Categories:** Privacy & Security, Tabs
-**Support website:** https://github.com/mbaker-wv/airlock-sessions
+**Support website:** https://github.com/mbaker-wv/hatrack
 **License:** MIT License
 **Privacy policy:** none needed (no data collected)
 
@@ -20,9 +20,9 @@ Use several accounts on the same site side by side without them getting mixed up
 ## Description
 
 ```
-I built Airlock because I juggle several accounts on the same sites (work, personal, and a few for clients), and every browser kept "helping" by signing me into the wrong one. Private windows didn't fix it either, since all private tabs share the same session.
+I built Hatrack because I juggle several accounts on the same sites (work, personal, and a few for clients), and every browser kept "helping" by signing me into the wrong one. Private windows didn't fix it either, since all private tabs share the same session.
 
-With Airlock, every new tab gets its own sealed-off session. Sign into one account in this tab, a different one in the next, and they'll never know about each other. Close the tab and that login is gone.
+With Hatrack, every new tab gets its own sealed-off session. Sign into one account in this tab, a different one in the next, and they'll never know about each other. Close the tab and that login is gone.
 
 A few things that make it nice to use day to day:
 
@@ -32,11 +32,11 @@ A few things that make it nice to use day to day:
 - Tick "Keep" on accounts you use every day and they'll stay signed in, even after you close their tabs.
 - Links you click in other apps open in a new session instead of whatever you were last signed into.
 - Firefox's password saving stays off, so it can't fill in the wrong password.
-- Don't want every tab sealed off? Turn automatic mode off and only open Airlock tabs when you ask for them.
+- Don't want every tab sealed off? Turn automatic mode off and only open Hatrack tabs when you ask for them.
 
 Managing a few admin dashboards for different organizations? Sign in once, then press ⌥⌘T to open the other tools for that same organization in the same session, with no extra sign-in prompts.
 
-Airlock doesn't collect anything, doesn't track you, and never connects to the internet on its own. The code is open on GitHub if you'd like to look under the hood.
+Hatrack doesn't collect anything, doesn't track you, and never connects to the internet on its own. The code is open on GitHub if you'd like to look under the hood.
 ```
 
 ## Notes to reviewer
@@ -44,13 +44,13 @@ Airlock doesn't collect anything, doesn't track you, and never connects to the i
 Only Mozilla's reviewers see these, so they're precise rather than friendly.
 
 ```
-Airlock uses contextualIdentities to give each tab its own container. When a blank new tab opens in the default container (firefox-default), Airlock opens a replacement tab in a fresh container and closes the blank one. webRequest blocking on main_frame requests is used only to detect pages about to load in the default container and reopen them in a new container; requests in other containers are passed through untouched. browsingData.remove is called only with the cookieStoreId of containers Airlock created, when their last tab closes or when the user clicks "Forget" on a kept session. privacy.services.passwordSavingEnabled is set to false so the password manager can't autofill credentials across sessions. No remote code, no network requests, no minified code, no build step. Source: https://github.com/mbaker-wv/airlock-sessions
+Hatrack uses contextualIdentities to give each tab its own container. When a blank new tab opens in the default container (firefox-default), Hatrack opens a replacement tab in a fresh container and closes the blank one. webRequest blocking on main_frame requests is used only to detect pages about to load in the default container and reopen them in a new container; requests in other containers are passed through untouched. browsingData.remove is called only with the cookieStoreId of containers Hatrack created, when their last tab closes or when the user clicks "Forget" on a kept session. privacy.services.passwordSavingEnabled is set to false so the password manager can't autofill credentials across sessions. No remote code, no network requests, no minified code, no build step. Source: https://github.com/mbaker-wv/hatrack
 ```
 
 ## Screenshots to add
 
 1280×800 works best.
 
-1. Three tabs with different Airlock colors, each signed into a different account
+1. Three tabs with different hat colors, each signed into a different account
 2. The toolbar button's menu, showing a renamed session and the Keep option
 3. The welcome and setup page

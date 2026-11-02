@@ -1,5 +1,5 @@
-// Airlock: every new tab gets its own private container (an "airlock").
-// An airlock's cookies, logins and site data are erased when its last tab closes,
+// Hatrack: every new tab gets its own private container (a "hat").
+// A hat's cookies, logins and site data are erased when its last tab closes,
 // unless you mark it "Keep". This add-on collects no data and makes no network requests.
 
 const COLORS = ["blue", "green", "orange", "purple", "red", "yellow", "turquoise", "pink"];
@@ -7,7 +7,7 @@ const DEFAULT_STORE = "firefox-default";
 const BLANK_URLS = new Set(["about:newtab", "about:home", "about:blank"]);
 
 // sessions[cookieStoreId] = { number, kept }. Only containers listed here are ours to manage.
-// auto: whether every new tab gets its own airlock (otherwise only on request).
+// auto: whether every new tab gets its own hat (otherwise only on request).
 let state = { sessions: {}, counter: 0, auto: true };
 const ready = start();
 
@@ -32,7 +32,7 @@ async function createSession() {
   state.counter += 1;
   const number = state.counter;
   const container = await browser.contextualIdentities.create({
-    name: `Airlock ${number}`,
+    name: `Hat ${number}`,
     color: COLORS[(number - 1) % COLORS.length],
     icon: "fingerprint",
   });
@@ -117,8 +117,8 @@ browser.commands.onCommand.addListener(async (command) => {
   if (tab) newTabInSameSession(tab);
 });
 
-browser.menus.create({ id: "same-session", title: "New Tab in This Airlock", contexts: ["tab"] });
-browser.menus.create({ id: "new-session", title: "New Airlock Tab", contexts: ["tab"] });
+browser.menus.create({ id: "same-session", title: "New Tab in This Hat", contexts: ["tab"] });
+browser.menus.create({ id: "new-session", title: "New Tab in a New Hat", contexts: ["tab"] });
 browser.menus.onClicked.addListener((info, tab) => {
   if (info.menuItemId === "same-session") newTabInSameSession(tab);
   if (info.menuItemId === "new-session") openInNewSession(tab);
@@ -155,7 +155,7 @@ browser.runtime.onMessage.addListener(async (msg) => {
       return describe(tab);
     case "rename":
       if (own) {
-        const name = msg.name.trim() || `Airlock ${own.number}`;
+        const name = msg.name.trim() || `Hat ${own.number}`;
         await browser.contextualIdentities.update(tab.cookieStoreId, { name });
       }
       return;

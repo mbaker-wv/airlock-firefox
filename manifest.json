@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "Airlock",
+  "name": "Hatrack",
   "version": "1.0.1",
-  "description": "Every new tab is its own sealed session, so several accounts on the same site never mix. A session's logins are erased when its last tab closes, unless you keep it.",
+  "description": "A different hat for every account. Each new tab gets its own private session, so several accounts on the same site never mix. Close the tab and its login is gone, unless you keep it.",
   "browser_specific_settings": {
     "gecko": {
       "id": "airlock-tabs@addon",
@@ -34,7 +34,7 @@
     "persistent": true
   },
   "browser_action": {
-    "default_title": "Airlock",
+    "default_title": "Hatrack",
     "default_popup": "popup.html",
     "default_icon": {
       "16": "icons/toolbar-dark-16.png",
@@ -54,7 +54,7 @@
   "commands": {
     "new-tab-same-session": {
       "suggested_key": { "default": "Ctrl+Alt+T" },
-      "description": "New tab in the same airlock"
+      "description": "New tab in the same hat"
     }
   }
 }

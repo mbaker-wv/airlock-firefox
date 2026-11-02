@@ -1,5 +1,5 @@
 # Weekly check for security and version updates to the GitHub Actions used above.
-# (Airlock itself has no third-party libraries.)
+# (Hatrack itself has no third-party libraries.)
 version: 2
 updates:
   - package-ecosystem: github-actions

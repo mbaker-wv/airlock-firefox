@@ -1,14 +1,14 @@
-# Airlock
+# Hatrack
 
-**Use several accounts on the same website, side by side, without them getting mixed up.**
+**A different hat for every account.** Use several accounts on the same website, side by side, without them getting mixed up.
 
-Airlock is a Firefox add-on. Every new tab gets its own private session, an "airlock",
+Hatrack is a Firefox add-on. Every new tab gets its own private session, a "hat",
 with its own logins. Sign into one account in this tab and a different one in the next,
 and they'll never see each other. Close the tab and that login is gone.
 
-[**Get Airlock from Firefox Add-ons →**](https://addons.mozilla.org/firefox/addon/airlock-sessions/)
+[**Get Hatrack from Firefox Add-ons →**](https://addons.mozilla.org/firefox/addon/hatrack/)
 
-![Three browser windows on the same site, each in its own colored Airlock session and signed into a different account](store/airlock-1280x800.png)
+![Three browser windows on the same site, each wearing its own colored hat and signed into a different account](store/hatrack-1280x800.png)
 
 ---
 
@@ -19,7 +19,7 @@ than one account on the same site, say work and personal, or a few clients. Then
 the browser keeps signing you into the wrong one. Private windows don't help either,
 because all private tabs share the same session.
 
-Airlock gives every tab a clean slate, so you decide which account goes where.
+Hatrack gives every tab a clean slate, so you decide which account goes where.
 
 ## How to use it
 
@@ -27,8 +27,8 @@ Airlock gives every tab a clean slate, so you decide which account goes where.
 |---|---|
 | Press **⌘T** (Mac) or **Ctrl+T** (Windows/Linux) | A new tab with a fresh, signed-out session |
 | Press **⌥⌘T** (Mac) or **Ctrl+Alt+T** | A new tab in the *same* session, already signed in |
-| Right-click a tab | Choose "New Tab in This Airlock" or "New Airlock Tab" |
-| Click the Airlock button in the toolbar | Rename the session, keep it signed in, or forget it |
+| Right-click a tab | Choose "New Tab in This Hat" or "New Tab in a New Hat" |
+| Click the Hatrack button in the toolbar | Rename the hat, keep it signed in, or forget it |
 
 **A few things worth knowing:**
 
@@ -39,8 +39,8 @@ Airlock gives every tab a clean slate, so you decide which account goes where.
   button. It stays until you click **Forget**.
 - **Links from other apps** (email, chat, documents) open in a new session, not in
   whatever you were last signed into.
-- **Prefer to choose when to use it?** Turn off "Give every new tab its own airlock" in the
-  toolbar button. Then normal tabs stay normal, and you open Airlock tabs when you want them.
+- **Prefer to choose when to use it?** Turn off "Give every new tab its own hat" in the
+  toolbar button. Then normal tabs stay normal, and you open Hatrack tabs when you want them.
 
 ## One setting to change
 
@@ -50,24 +50,24 @@ automatically, in every tab. Add-ons aren't allowed to change it, so please turn
 **Firefox Settings → Privacy & Security →** uncheck
 *"Allow Windows single sign-on for Microsoft, work, and school accounts"* (if you see it).
 
-That's Firefox's own name for the setting. Airlock works with any website.
+That's Firefox's own name for the setting. Hatrack works with any website.
 
-Airlock turns off Firefox's password saving for you, so it can never fill in one account's
+Hatrack turns off Firefox's password saving for you, so it can never fill in one account's
 password on another account's page.
 
 ## Privacy
 
-**Airlock doesn't collect anything.** No analytics, no tracking, and it never connects to
+**Hatrack doesn't collect anything.** No analytics, no tracking, and it never connects to
 the internet by itself. Everything it remembers (which sessions are yours, their names,
 which ones you kept) stays inside your own Firefox.
 
 Firefox shows a list of permissions when you install an add-on. Here's what each one is for,
 in plain terms:
 
-| Firefox says Airlock can… | Why it needs that |
+| Firefox says Hatrack can… | Why it needs that |
 |---|---|
-| Access your data for all websites | To catch a page *before* it loads in Firefox's shared session and open it in its own airlock instead. Airlock doesn't read or change the pages themselves. |
-| Clear recent browsing history, cookies, and related data | To erase a session's logins when you close it, and only for sessions Airlock created. |
+| Access your data for all websites | To catch a page *before* it loads in Firefox's shared session and open it in its own hat instead. Hatrack doesn't read or change the pages themselves. |
+| Clear recent browsing history, cookies, and related data | To erase a session's logins when you close it, and only for sessions Hatrack created. |
 | Read and modify privacy settings | To keep Firefox's password saving turned off. |
 | Access browser tabs | To open new tabs in the right session. |
 
@@ -122,7 +122,7 @@ addons.mozilla.org → **Tools → Manage API Keys**.
 To build the zip by hand instead:
 
 ```bash
-zip -r ../Airlock.zip manifest.json background.js popup.html popup.css popup.js welcome.html welcome.css welcome.js icons LICENSE
+zip -r ../Hatrack.zip manifest.json background.js popup.html popup.css popup.js welcome.html welcome.css welcome.js icons LICENSE
 ```
 
 </details>

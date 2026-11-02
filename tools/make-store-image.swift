@@ -1,4 +1,4 @@
-// Draws Airlock's 1280×800 store/README image: the icon, name and tagline on the left,
+// Draws Hatrack's 1280×800 store/README image: the icon, name and tagline on the left,
 // and three browser windows on the right, each in its own colored session and signed
 // into a different (made-up) account.
 // Usage: swift make-store-image.swift <icon.png> <out.png>
@@ -27,9 +27,9 @@ NSGradient(starting: color(37, 52, 76), ending: color(12, 18, 34))!
 
 // Left: icon, name, tagline, three points.
 NSImage(contentsOfFile: CommandLine.arguments[1])!.draw(in: NSRect(x: 80, y: 480, width: 190, height: 190))
-text("Airlock", 76, .white, at: NSPoint(x: 80, y: 370), weight: .bold)
-text("Several accounts on the same site,", 28, color(203, 213, 225), at: NSPoint(x: 82, y: 322))
-text("side by side. Never mixed up.", 28, color(203, 213, 225), at: NSPoint(x: 82, y: 286))
+text("Hatrack", 76, .white, at: NSPoint(x: 80, y: 370), weight: .bold)
+text("A different hat for every account.", 28, color(203, 213, 225), at: NSPoint(x: 82, y: 322))
+text("Same site, side by side, never mixed up.", 28, color(203, 213, 225), at: NSPoint(x: 82, y: 286))
 
 let sessions: [(name: String, account: String, initial: String, color: NSColor)] = [
     ("Work", "alex@work.example", "A", color(59, 130, 246)),
