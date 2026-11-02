@@ -7,7 +7,7 @@ Kept here so it's easy to update and reuse.
 **Name:** Airlock
 **Web address:** `airlock-sessions`
 **Categories:** Privacy & Security, Tabs
-**Support website:** https://github.com/mbaker-wv/airlock-firefox
+**Support website:** https://github.com/mbaker-wv/airlock-sessions
 **License:** MIT License
 **Privacy policy:** none needed (no data collected)
 
@@ -44,7 +44,7 @@ Airlock doesn't collect anything, doesn't track you, and never connects to the i
 Only Mozilla's reviewers see these, so they're precise rather than friendly.
 
 ```
-Airlock uses contextualIdentities to give each tab its own container. When a blank new tab opens in the default container (firefox-default), Airlock opens a replacement tab in a fresh container and closes the blank one. webRequest blocking on main_frame requests is used only to detect pages about to load in the default container and reopen them in a new container; requests in other containers are passed through untouched. browsingData.remove is called only with the cookieStoreId of containers Airlock created, when their last tab closes or when the user clicks "Forget" on a kept session. privacy.services.passwordSavingEnabled is set to false so the password manager can't autofill credentials across sessions. No remote code, no network requests, no minified code, no build step. Source: https://github.com/mbaker-wv/airlock-firefox
+Airlock uses contextualIdentities to give each tab its own container. When a blank new tab opens in the default container (firefox-default), Airlock opens a replacement tab in a fresh container and closes the blank one. webRequest blocking on main_frame requests is used only to detect pages about to load in the default container and reopen them in a new container; requests in other containers are passed through untouched. browsingData.remove is called only with the cookieStoreId of containers Airlock created, when their last tab closes or when the user clicks "Forget" on a kept session. privacy.services.passwordSavingEnabled is set to false so the password manager can't autofill credentials across sessions. No remote code, no network requests, no minified code, no build step. Source: https://github.com/mbaker-wv/airlock-sessions
 ```
 
 ## Screenshots to add
