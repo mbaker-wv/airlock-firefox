@@ -101,8 +101,8 @@ It stays loaded until Firefox quits.
 | `popup.html/.js/.css` | The toolbar button's menu |
 | `welcome.html/.js/.css` | The setup and help page |
 | `icons/` | Store icon and toolbar icons (light and dark) |
-| `store/` | The store and README image |
-| `tools/` | Scripts that draw the icons and store image (not part of the add-on) |
+| `store/` | Store screenshots (also used in this README) |
+| `tools/` | Scripts that draw the icons and screenshots (not part of the add-on) |
 
 ### Release a new version
 

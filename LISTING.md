@@ -47,10 +47,12 @@ Only Mozilla's reviewers see these, so they're precise rather than friendly.
 Hatrack uses contextualIdentities to give each tab its own container. When a blank new tab opens in the default container (firefox-default), Hatrack opens a replacement tab in a fresh container and closes the blank one. webRequest blocking on main_frame requests is used only to detect pages about to load in the default container and reopen them in a new container; requests in other containers are passed through untouched. browsingData.remove is called only with the cookieStoreId of containers Hatrack created, when their last tab closes or when the user clicks "Forget" on a kept session. privacy.services.passwordSavingEnabled is set to false so the password manager can't autofill credentials across sessions. No remote code, no network requests, no minified code, no build step. Source: https://github.com/mbaker-wv/hatrack
 ```
 
-## Screenshots to add
+## Screenshots
 
-1280×800 works best.
+All 1280×800, in `store/`. Upload them in this order, with these captions:
 
-1. Three tabs with different hat colors, each signed into a different account
-2. The toolbar button's menu, showing a renamed session and the Keep option
-3. The welcome and setup page
+1. `hatrack-1280x800.png`: A different hat for every account: the same site, side by side, each signed into its own account.
+2. `hatrack-menu-1280x800.png`: Name your hats, keep the ones you wear every day, and open more tabs in the same hat.
+3. `hatrack-setup-1280x800.png`: A short setup page walks you through the few settings worth changing.
+
+To redraw them: `tools/make-store-image.swift` (1), `tools/render-page.swift` + `tools/make-popup-shot.swift` (2, 3).
