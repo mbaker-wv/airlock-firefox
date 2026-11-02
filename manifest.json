@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Airlock",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Every new tab is its own sealed session, so several accounts on the same site never mix. A session's logins are erased when its last tab closes, unless you keep it.",
   "browser_specific_settings": {
     "gecko": {
