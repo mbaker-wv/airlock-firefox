@@ -29,7 +29,8 @@ Hatrack gives every tab a clean slate, so you decide which account goes where.
 | Press **⌥⌘T** (Mac) or **Ctrl+Alt+T** | A new tab in the *same* hat, already signed in |
 | Right-click a link | "Open Link in New Hat", for a signed-out copy or a different account |
 | Right-click a tab | "New Tab in This Hat" or "New Tab in a New Hat" |
-| Click the Hatrack button in the toolbar | Rename the hat, keep it signed in, or forget it |
+| Click the Hatrack button in the toolbar | Rename this hat or keep it signed in, and see **Your hats**: jump to any of them, or open another tab in one |
+| **Manage hats** (from the Hatrack button) | One page for all your hats: rename, recolor, keep, go to, close tabs, forget, or erase every hat you haven't kept |
 
 **A few things worth knowing:**
 
@@ -115,6 +116,7 @@ It stays loaded until Firefox quits.
 | `manifest.json` | The add-on's name, version and permissions |
 | `background.js` | The core: creates and erases sessions, handles shortcuts |
 | `popup.html/.js/.css` | The toolbar button's menu |
+| `hats.html/.js/.css` | The Manage hats page |
 | `welcome.html/.js/.css` | The setup and help page |
 | `icons/` | Store icon and toolbar icons (light and dark) |
 | `store/` | Store screenshots (also used in this README) |
@@ -139,7 +141,7 @@ This uses the maintainer's own Mozilla API keys, stored as private repository se
 To build the zip by hand instead:
 
 ```bash
-zip -r ../Hatrack.zip manifest.json background.js popup.html popup.css popup.js welcome.html welcome.css welcome.js icons LICENSE
+zip -r ../Hatrack.zip manifest.json background.js popup.html popup.css popup.js hats.html hats.css hats.js welcome.html welcome.css welcome.js icons LICENSE
 ```
 
 </details>

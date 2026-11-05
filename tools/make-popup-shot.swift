@@ -35,7 +35,7 @@ text("every day.", 54, .white, at: NSPoint(x: 80, y: 364), weight: .bold)
 let points: [(String, NSColor)] = [
     ("Rename a hat: \"Work\", \"Client A\"…", color(55, 173, 255)),
     ("Keep it signed in after closing its tabs", color(81, 205, 0)),
-    ("Open another tab in the same hat: ⌥⌘T", color(255, 159, 0)),
+    ("Jump to any hat, or add a tab to it", color(255, 159, 0)),
 ]
 for (i, (p, c)) in points.enumerated() {
     let y = 270 - CGFloat(i) * 52

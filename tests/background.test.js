@@ -94,6 +94,43 @@
   await tick(60 * 60_000);
   check("kept hat survives", !!state.sessions[kept]);
 
+  // Managing hats from the menu and the Manage hats page (by id, with no tab attached).
+  const send = (msg) => fire("runtime.onMessage", msg);
+  await send({ type: "setSetting", key: "graceMinutes", value: 2 });
+  const someTab = userTabs().find(x => state.sessions[x.cookieStoreId]);
+  const d = await listeners["runtime.onMessage"][0]({ type: "describe", tab: someTab });
+  check("menu lists every hat and marks the current one", d.current === someTab.cookieStoreId && d.hats.length === hats().length);
+  const list = await listeners["runtime.onMessage"][0]({ type: "hats" });
+  const target = list.find(h => h.tabCount > 0 && !h.kept);
+  await send({ type: "hatRename", id: target.id, name: "Client A" });
+  check("rename a hat by id", containers.get(target.id).name === "Client A");
+  await send({ type: "hatColor", id: target.id, color: "pink" });
+  check("change a hat's color", containers.get(target.id).color === "pink");
+  await send({ type: "hatColor", id: target.id, color: "not-a-color" });
+  check("unknown colors are ignored", containers.get(target.id).color === "pink");
+  await send({ type: "hatKeep", id: target.id, kept: true });
+  await send({ type: "hatClose", id: target.id });
+  await tick(10 * 60_000);
+  check("close a kept hat's tabs: it stays", !!state.sessions[target.id] && userTabs().every(x => x.cookieStoreId !== target.id));
+  await send({ type: "hatKeep", id: target.id, kept: false });
+  await tick(1000);
+  check("un-keep a hat with no tabs: it waits first", !!state.sessions[target.id]);
+  await tick(3 * 60_000);
+  check("...then it's erased", !state.sessions[target.id]);
+  const focusTarget = hats().find(([id]) => userTabs().some(x => x.cookieStoreId === id))[0];
+  await send({ type: "hatFocus", id: focusTarget, windowId: 1 });
+  check("go to a hat activates its tab", userTabs().find(x => x.active).cookieStoreId === focusTarget);
+  const before2 = userTabs().length;
+  await send({ type: "hatOpen", id: focusTarget, windowId: 1 });
+  check("new tab in a chosen hat", userTabs().length === before2 + 1 && userTabs().filter(x => x.cookieStoreId === focusTarget).length >= 2);
+  await send({ type: "hatForget", id: focusTarget });
+  check("forget a hat by id (no tab needed)", !state.sessions[focusTarget] && userTabs().every(x => x.cookieStoreId !== focusTarget));
+  const keepOne = hats()[0][0];
+  state.sessions[keepOne].kept = true;
+  const n1 = await browser.tabs.create({ url: "about:newtab" }); await fire("tabs.onCreated", { ...n1 });
+  await send({ type: "forgetUnkept" });
+  check("erase every hat you haven't kept", hats().length === 1 && hats()[0][0] === keepOne);
+
   print(failures ? `\n${failures} FAILED` : "\nALL PASSED");
   if (failures && globalThis.process) process.exit(1);
 } catch (e) { print("ERROR: " + e + "\n" + e.stack); if (globalThis.process) process.exit(1); } })();

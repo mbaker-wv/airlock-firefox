@@ -76,3 +76,4 @@ select { font: inherit; font-weight: 400; padding: 3px 6px; border: 1px solid va
 @media (max-width: 520px) {
   td:first-child { white-space: normal; }
 }
+[hidden] { display: none !important; }

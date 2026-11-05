@@ -221,21 +221,34 @@ browser.menus.onClicked.addListener((info, tab) => {
   if (info.menuItemId === "link-new-session") openInNewSession(tab, info.linkUrl);
 });
 
-// Requests from the toolbar popup and the setup page.
-async function describe(tab) {
-  const own = state.sessions[tab.cookieStoreId];
-  let session = null;
-  if (own) {
-    const c = await browser.contextualIdentities.get(tab.cookieStoreId);
-    session = { name: c.name, colorCode: c.colorCode, kept: own.kept };
-  }
-  const kept = [];
+// Requests from the toolbar popup, the Manage hats page and the setup page.
+
+// Every hat Hatrack manages, with its tab count, sorted by number.
+async function listHats() {
+  const hats = [];
   for (const [id, s] of Object.entries(state.sessions)) {
-    if (!s.kept || id === tab.cookieStoreId) continue;
     const c = await browser.contextualIdentities.get(id).catch(() => null);
-    if (c) kept.push({ id, name: c.name, colorCode: c.colorCode });
+    if (!c) continue;
+    const tabCount = (await browser.tabs.query({ cookieStoreId: id })).length;
+    const eraseAt = !s.kept && tabCount === 0 && s.emptySince ? s.emptySince + state.graceMinutes * 60_000 : null;
+    hats.push({ id, name: c.name, color: c.color, colorCode: c.colorCode, number: s.number, kept: s.kept, tabCount, eraseAt });
   }
-  return { session, kept, auto: state.auto };
+  return hats.sort((a, b) => a.number - b.number);
+}
+
+// Switches to one of a hat's tabs (preferring the given window), or opens one.
+async function focusHat(id, windowId) {
+  const hatTabs = await browser.tabs.query({ cookieStoreId: id });
+  const tab = hatTabs.find(t => t.windowId === windowId) || hatTabs[0];
+  if (!tab) return browser.tabs.create({ cookieStoreId: id, windowId });
+  await browser.tabs.update(tab.id, { active: true });
+  await browser.windows.update(tab.windowId, { focused: true });
+}
+
+async function forgetHat(id) {
+  if (!state.sessions[id]) return;
+  for (const t of await browser.tabs.query({ cookieStoreId: id })) await browser.tabs.remove(t.id);
+  await removeSession(id);
 }
 
 function settings() {
@@ -244,43 +257,65 @@ function settings() {
 
 browser.runtime.onMessage.addListener(async (msg) => {
   await ready;
-  if (msg.type === "settings") {
-    await refreshLinkPermission();
-    return settings();
-  }
-  if (msg.type === "setSetting") {
-    if (["auto", "catchLinks"].includes(msg.key)) state[msg.key] = !!msg.value;
-    if (msg.key === "graceMinutes") state.graceMinutes = Math.max(0, Number(msg.value) || 0);
-    await save();
-    if (msg.key === "graceMinutes") await cleanup();
-    return settings();
-  }
-  const tab = msg.tab;
-  const own = state.sessions[tab.cookieStoreId];
+  const hat = msg.id && state.sessions[msg.id];
   switch (msg.type) {
+    case "settings":
+      await refreshLinkPermission();
+      return settings();
+    case "setSetting":
+      if (["auto", "catchLinks"].includes(msg.key)) state[msg.key] = !!msg.value;
+      if (msg.key === "graceMinutes") state.graceMinutes = Math.max(0, Number(msg.value) || 0);
+      await save();
+      if (msg.key === "graceMinutes") await cleanup();
+      return settings();
+
+    // The popup: the current tab's hat (if any) and every hat.
     case "describe":
-      return describe(tab);
-    case "rename":
-      if (own) {
-        const name = msg.name.trim() || `Hat ${own.number}`;
-        await browser.contextualIdentities.update(tab.cookieStoreId, { name });
+      return { current: state.sessions[msg.tab.cookieStoreId] ? msg.tab.cookieStoreId : null, hats: await listHats(), auto: state.auto };
+    case "newSame":
+      return newTabInSameSession(msg.tab);
+    case "newIsolated":
+      return openInNewSession(msg.tab);
+
+    // Acting on one hat, by id.
+    case "hats":
+      return listHats();
+    case "hatRename":
+      if (hat) {
+        await browser.contextualIdentities.update(msg.id, { name: msg.name.trim() || `Hat ${hat.number}` });
         await updateAllBadges();
       }
       return;
-    case "keep":
-      if (own) {
-        own.kept = msg.kept;
-        await save();
+    case "hatColor":
+      if (hat && COLORS.includes(msg.color)) {
+        await browser.contextualIdentities.update(msg.id, { color: msg.color });
+        await updateAllBadges();
       }
       return;
-    case "newSame":
-      return newTabInSameSession(tab);
-    case "newIsolated":
-      return openInNewSession(tab);
-    case "openKept":
-      return browser.tabs.create({ cookieStoreId: msg.id, windowId: tab.windowId, index: tab.index + 1 });
-    case "forget":
-      for (const t of await browser.tabs.query({ cookieStoreId: msg.id })) await browser.tabs.remove(t.id);
-      return removeSession(msg.id);
+    case "hatKeep":
+      if (hat) {
+        hat.kept = !!msg.kept;
+        await save();
+        if (!hat.kept) await cleanup();   // an un-kept hat with no tabs starts its wait now
+      }
+      return;
+    case "hatFocus":
+      if (hat) return focusHat(msg.id, msg.windowId);
+      return;
+    case "hatOpen":
+      if (hat) return browser.tabs.create({ cookieStoreId: msg.id, windowId: msg.windowId });
+      return;
+    case "hatClose":
+      if (hat) {
+        for (const t of await browser.tabs.query({ cookieStoreId: msg.id })) await browser.tabs.remove(t.id);
+      }
+      return;
+    case "hatForget":
+      return forgetHat(msg.id);
+    case "forgetUnkept":
+      for (const [id, s] of Object.entries(state.sessions)) {
+        if (!s.kept) await forgetHat(id);
+      }
+      return;
   }
 });

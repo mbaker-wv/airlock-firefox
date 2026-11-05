@@ -31,7 +31,8 @@ A few things that make it nice to use day to day:
 - Each hat gets its own color, and you can name it "Work" or "Client A" so you always know which one you're wearing.
 - Tick "Keep" on the hats you wear every day and they'll stay signed in, even after you close their tabs.
 - Right-click any link and choose "Open Link in New Hat" for a signed-out copy or a different account.
-- The Hatrack button shows which hat you're in, in its color.
+- The Hatrack button shows which hat you're in, in its color, and lists all your hats so you can jump between them.
+- A Manage hats page lets you rename, recolor, keep or forget any hat, all in one place.
 - Closed a tab by accident? Hats wait a couple of minutes before they're erased, so ⇧⌘T brings it back still signed in.
 - Optional: links you click in other apps can open in a new hat too.
 - Firefox's password saving stays off, so it can't fill in the wrong password.
@@ -55,7 +56,8 @@ Hatrack uses contextualIdentities to give each tab its own container. When a bla
 All 1280×800, in `store/`. Upload them in this order, with these captions:
 
 1. `hatrack-1280x800.png`: A different hat for every account: the same site, side by side, each signed into its own account.
-2. `hatrack-menu-1280x800.png`: Name your hats, keep the ones you wear every day, and open more tabs in the same hat.
-3. `hatrack-setup-1280x800.png`: A short setup page walks you through the few settings worth changing.
+2. `hatrack-menu-1280x800.png`: Name your hats, keep the ones you wear every day, and jump between them from the toolbar.
+3. `hatrack-manage-1280x800.png`: Manage all your hats on one page: rename, recolor, keep, or forget.
+4. `hatrack-setup-1280x800.png`: A short setup page walks you through the few settings worth changing.
 
-To redraw them: `tools/make-store-image.swift` (1), `tools/render-page.swift` + `tools/make-popup-shot.swift` (2, 3).
+To redraw them: `tools/make-store-image.swift` (1), `tools/render-page.swift` + `tools/make-popup-shot.swift` (2, 3, 4).

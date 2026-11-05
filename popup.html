@@ -5,7 +5,7 @@
   <link rel="stylesheet" href="popup.css">
 </head>
 <body>
-  <section id="current">
+  <section id="current" hidden>
     <div class="row">
       <span id="dot" class="dot"></span>
       <input id="name" type="text" maxlength="40" title="Rename this hat">
@@ -17,12 +17,12 @@
   </section>
   <p id="none" class="muted" hidden>This tab doesn't have a hat yet.</p>
 
-  <button id="newSame">New tab in this hat <span class="key">⌥⌘T</span></button>
-  <button id="newIsolated">New tab in a new hat</button>
+  <button id="newSame" hidden>New tab in this hat <span class="key">⌥⌘T</span></button>
+  <button id="newIsolated">New tab in a new hat <span class="key">⌘T</span></button>
 
-  <section id="keptSection" hidden>
-    <h2>Kept hats</h2>
-    <ul id="keptList"></ul>
+  <section id="hatsSection" hidden>
+    <h2>Your hats</h2>
+    <ul id="hatList"></ul>
   </section>
 
   <hr>
@@ -30,7 +30,10 @@
     <input id="auto" type="checkbox">
     Give every new tab its own hat
   </label>
-  <a id="help" href="#">Setup &amp; help</a>
+  <nav class="links">
+    <a id="manage" href="#">Manage hats</a>
+    <a id="help" href="#">Setup &amp; help</a>
+  </nav>
 
   <script src="popup.js"></script>
 </body>

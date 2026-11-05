@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Hatrack: your hats</title>
+  <link rel="stylesheet" href="welcome.css">
+  <link rel="stylesheet" href="hats.css">
+</head>
+<body>
+  <main>
+    <header>
+      <img src="icons/icon-96.png" alt="" width="64" height="64">
+      <div>
+        <h1>Your hats</h1>
+        <p class="lead">Every account you're signed into, one hat each. Rename them, give them a color, keep the ones you wear every day.</p>
+      </div>
+    </header>
+
+    <div class="actions">
+      <button id="newHat" class="primary">New tab in a new hat</button>
+      <a id="settings" href="welcome.html">Settings &amp; help</a>
+    </div>
+
+    <p id="empty" class="empty" hidden>No hats yet. Press <kbd>⌘T</kbd> to open a tab in a new hat.</p>
+    <ul id="hats" class="hats"></ul>
+
+    <section id="danger" class="danger" hidden>
+      <div>
+        <strong>Erase every hat you haven't kept</strong>
+        <p class="note">Closes their tabs and signs you out of them right away. Kept hats aren't touched.</p>
+      </div>
+      <button id="forgetUnkept" class="warn">Erase now</button>
+    </section>
+  </main>
+  <script src="hats.js"></script>
+</body>
+</html>
