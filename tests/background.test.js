@@ -61,6 +61,27 @@
   check("with permission, a link moves into a new hat", r && r.cancel && moved.length === 1 && moved[0].cookieStoreId !== "firefox-default");
   check("no extra empty hat left behind", hats().length === before + 1);
 
+  // Real ⌘T: Firefox reports the tab as about:blank first, then switches it to about:newtab.
+  let count = hats().length;
+  const real = await browser.tabs.create({ url: "about:blank" });
+  tabs.get(real.id).status = "loading";
+  const realCreated = fire("tabs.onCreated", { ...real });
+  await tick(100);
+  Object.assign(tabs.get(real.id), { url: "about:newtab", status: "complete" });
+  await tick(600); await realCreated;
+  check("real ⌘T (blank, then New Tab page) gets a hat", hats().length === count + 1 && !tabs.has(real.id));
+
+  // A link from another app while "links from other apps" is off stays a normal tab.
+  granted = false; await fire("perm.remove");
+  count = hats().length;
+  const link = await browser.tabs.create({ url: "about:blank" });
+  tabs.get(link.id).status = "loading";
+  const linkCreated = fire("tabs.onCreated", { ...link });
+  await tick(100);
+  Object.assign(tabs.get(link.id), { url: "https://chat.example/x", status: "loading" });
+  await tick(600); await linkCreated;
+  check("a loading web page is left alone", hats().length === count && tabs.has(link.id));
+
   // Open Link in New Hat.
   const n = hats().length;
   await fire("menus.onClicked", { menuItemId: "link-new-session", linkUrl: "https://example.com/a" }, userTabs()[0]);

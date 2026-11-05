@@ -24,11 +24,12 @@ async function start() {
   for (const id of Object.keys(state.sessions)) {
     if (!existing.has(id)) delete state.sessions[id];
   }
-  await refreshLinkPermission();
-  await cleanup({ now: true });   // hats left behind when Firefox last closed
+  // None of these may stop Hatrack from starting: every tab handler waits on `ready`.
+  await refreshLinkPermission().catch(() => {});
+  await cleanup({ now: true }).catch(() => {});   // hats left behind when Firefox last closed
   // Firefox's password saving stays off, so it can't autofill another account's password.
-  await browser.privacy.services.passwordSavingEnabled.set({ value: false });
-  await updateAllBadges();
+  await browser.privacy.services.passwordSavingEnabled.set({ value: false }).catch(() => {});
+  await updateAllBadges().catch(() => {});
 }
 
 function save() {
@@ -169,12 +170,15 @@ browser.tabs.onCreated.addListener(async (tab) => {
   await ready;
   if (!state.auto || tab.incognito || tab.cookieStoreId !== DEFAULT_STORE) return;
   if (tab.url === "about:blank") {
-    // Either a blank new tab, or a tab Firefox opened for a link from another app that
-    // hasn't started loading yet. Give it a moment, and leave it alone if a page loads.
+    // Firefox reports a new tab as about:blank before it shows the New Tab page, and a
+    // link from another app also starts as about:blank. Give it a moment: a New Tab page
+    // or a still-empty tab gets a hat; a tab that started loading a web page is left alone.
     await new Promise(resolve => setTimeout(resolve, 500));
     if (movedTabs.has(tab.id)) return;
     const current = await browser.tabs.get(tab.id).catch(() => null);
-    if (!current || current.url !== "about:blank" || current.status !== "complete") return;
+    const isNewTab = current && current.cookieStoreId === DEFAULT_STORE
+      && (NEW_TAB_URLS.has(current.url) || (current.url === "about:blank" && current.status === "complete"));
+    if (!isNewTab) return;
   } else if (!NEW_TAB_URLS.has(tab.url)) {
     return;
   }
