@@ -23,4 +23,4 @@ jobs:
       - name: Behavior tests
         run: node tests/run.js
       - name: Lint with web-ext
-        run: npx --yes web-ext@8 lint --source-dir . --ignore-files "tools/**" "tests/**" "*.md"
+        run: npx --yes web-ext@8 lint --source-dir . --ignore-files "tools/**" "tests/**" "store/**" "*.md"

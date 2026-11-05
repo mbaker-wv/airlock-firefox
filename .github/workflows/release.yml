@@ -3,8 +3,9 @@
 # and attaches the package to a GitHub release. Users get it automatically once
 # Mozilla approves it.
 #
-# Needs two repository secrets from https://addons.mozilla.org/developers/addon/api/key/
-#   AMO_JWT_ISSUER, AMO_JWT_SECRET
+# Sending to Mozilla needs two repository secrets from
+# https://addons.mozilla.org/developers/addon/api/key/ (AMO_JWT_ISSUER, AMO_JWT_SECRET).
+# Without them, that step is skipped and the zip is uploaded to Mozilla by hand.
 name: Release
 
 on:
@@ -17,6 +18,8 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
+    env:
+      HAS_AMO_KEYS: ${{ secrets.AMO_JWT_ISSUER != '' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -35,18 +38,23 @@ jobs:
         run: node tests/run.js
 
       - name: Lint
-        run: npx --yes web-ext@8 lint --source-dir . --ignore-files "tools/**" "tests/**" "*.md"
+        run: npx --yes web-ext@8 lint --source-dir . --ignore-files "tools/**" "tests/**" "store/**" "*.md"
 
       - name: Build package
-        run: npx --yes web-ext@8 build --source-dir . --ignore-files "tools/**" "tests/**" "*.md" --artifacts-dir web-ext-artifacts --overwrite-dest
+        run: npx --yes web-ext@8 build --source-dir . --ignore-files "tools/**" "tests/**" "store/**" "*.md" --artifacts-dir web-ext-artifacts --overwrite-dest
 
       - name: Submit to addons.mozilla.org for signing
+        if: env.HAS_AMO_KEYS == 'true'
         env:
           WEB_EXT_API_KEY: ${{ secrets.AMO_JWT_ISSUER }}
           WEB_EXT_API_SECRET: ${{ secrets.AMO_JWT_SECRET }}
-        run: npx --yes web-ext@8 sign --source-dir . --ignore-files "tools/**" "tests/**" "*.md" --channel listed --artifacts-dir web-ext-artifacts --approval-timeout 0
+        run: npx --yes web-ext@8 sign --source-dir . --ignore-files "tools/**" "tests/**" "store/**" "*.md" --channel listed --artifacts-dir web-ext-artifacts --approval-timeout 0
 
       - name: GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" web-ext-artifacts/*.zip --title "Hatrack $GITHUB_REF_NAME" --generate-notes
+        run: |
+          # Release notes: this version's section of CHANGELOG.md.
+          awk -v heading="## ${GITHUB_REF_NAME#v}" '$0 == heading { found = 1; next } /^## / { found = 0 } found' CHANGELOG.md > notes.md
+          printf '\nInstall from Firefox Add-ons: https://addons.mozilla.org/firefox/addon/hatrack/\n' >> notes.md
+          gh release create "$GITHUB_REF_NAME" web-ext-artifacts/*.zip --title "Hatrack $GITHUB_REF_NAME" --notes-file notes.md
