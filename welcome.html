@@ -28,13 +28,28 @@
           Add-ons aren't allowed to change this, so please do it once: open <b>Settings → Privacy &amp; Security</b> and uncheck
           <b>“Allow Windows single sign-on for Microsoft, work, and school accounts”</b>. If you don't see it, you're all set.</p>
       </li>
+      <li id="links">
+        <strong>Links from other apps</strong> <span class="optional">optional</span>
+        <span id="linksStatus" class="status"></span>
+        <p>When you click a link in your email or chat app, Firefox opens it in its shared, everyday session, signed in as
+          whoever you used last. Turn this on and Hatrack moves those pages into a new hat instead. Firefox will ask to let
+          Hatrack <b>“access your data for all websites”</b>: it only uses that to catch a page before it loads. It doesn't read
+          or change the pages themselves.</p>
+        <label class="toggle inline">
+          <input id="catchLinks" type="checkbox">
+          Open links from other apps in a new hat
+        </label>
+        <p class="note">Using Multi-Account Containers' <b>“Always open this site in…”</b>? Leave this off, so the two add-ons
+          don't both grab the same link.</p>
+      </li>
       <li>
-        <strong>Remove other container add-ons</strong>
-        <p>If you use something like Temporary Containers, it'll fight Hatrack over new tabs. Open <b>Add-ons and themes (⇧⌘A)</b> and remove it.</p>
+        <strong>Remove Temporary Containers</strong>
+        <p>If you use Temporary Containers, it'll fight Hatrack over new tabs. Open <b>Add-ons and themes (⇧⌘A)</b> and remove it.</p>
       </li>
       <li>
         <strong>Pin the Hatrack button</strong>
-        <p>Click the puzzle-piece icon in the toolbar, then the gear next to Hatrack, then <b>Pin to Toolbar</b>.</p>
+        <p>Click the puzzle-piece icon in the toolbar, then the gear next to Hatrack, then <b>Pin to Toolbar</b>.
+          The button shows which hat you're in: its number or initials, in its color.</p>
       </li>
     </ol>
 
@@ -42,22 +57,36 @@
     <table>
       <tr><td><kbd>⌘T</kbd> / <kbd>Ctrl+T</kbd></td><td>A new tab in a new hat: fresh and signed out</td></tr>
       <tr><td><kbd>⌥⌘T</kbd> / <kbd>Ctrl+Alt+T</kbd></td><td>A new tab in the <em>same</em> hat, already signed in</td></tr>
+      <tr><td>Right-click a link</td><td>“Open Link in New Hat”, for a signed-out copy or a different account</td></tr>
       <tr><td>Right-click a tab</td><td>“New Tab in This Hat” or “New Tab in a New Hat”</td></tr>
       <tr><td>The Hatrack button</td><td>Rename a hat, keep it signed in, or forget it</td></tr>
     </table>
     <p>Each hat has its own color, shown under its tabs and in the address bar.
-      When you close a hat's last tab, its logins and site data are erased, unless you ticked <b>Keep</b>.</p>
+      When you close a hat's last tab, its logins and site data are erased (after the short wait you choose below), unless you ticked <b>Keep</b>.</p>
     <p class="tip"><b>Tip:</b> sign in once, then press <kbd>⌥⌘T</kbd> to open other pages for the same account.
       They share that hat's sign-in, so you won't be asked again.</p>
 
-    <label class="toggle">
-      <input id="auto" type="checkbox">
-      Give every new tab its own hat
-    </label>
+    <h2>Settings</h2>
+    <div class="settings">
+      <label class="toggle">
+        <input id="auto" type="checkbox">
+        Give every new tab its own hat
+      </label>
+      <label class="setting">
+        When a hat's last tab closes, erase it
+        <select id="grace">
+          <option value="0">right away</option>
+          <option value="2">after 2 minutes</option>
+          <option value="10">after 10 minutes</option>
+          <option value="30">after 30 minutes</option>
+        </select>
+      </label>
+      <p class="note">The wait lets you reopen a tab you closed by accident (<kbd>⇧⌘T</kbd>) and still be signed in.
+        Hats are always erased when Firefox restarts.</p>
+    </div>
 
     <h2>Privacy</h2>
-    <p>Hatrack doesn't collect anything, doesn't track you, and never connects to the internet by itself. Everything it remembers stays in your Firefox.
-      It asks to access all websites only so it can catch a page before it loads in Firefox's shared session and open it in its own hat instead.</p>
+    <p>Hatrack doesn't collect anything, doesn't track you, and never connects to the internet by itself. Everything it remembers stays in your Firefox.</p>
   </main>
   <script src="welcome.js"></script>
 </body>

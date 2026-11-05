@@ -16,10 +16,14 @@ window.browser = {
           auto: true,
         };
       }
-      if (msg.type === "getAuto") return true;
+      if (msg.type === "settings") return { auto: true, catchLinks: true, canCatchLinks: true, graceMinutes: 2 };
     },
     openOptionsPage: () => {},
     getURL: (path) => path,
+  },
+  permissions: {
+    request: async () => true,
+    remove: async () => true,
   },
   privacy: {
     services: { passwordSavingEnabled: { get: async () => ({ value: false }) } },

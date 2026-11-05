@@ -30,7 +30,7 @@ async function render() {
     const open = document.createElement("button");
     open.className = "open";
     open.textContent = k.name;
-    open.title = "Open a tab in this session";
+    open.title = "Open a tab in this hat";
     open.onclick = async () => { await send("openKept", { id: k.id }); window.close(); };
     const forget = document.createElement("button");
     forget.className = "forget";
@@ -47,7 +47,7 @@ $("name").addEventListener("keydown", (e) => { if (e.key === "Enter") $("name").
 $("keep").addEventListener("change", () => send("keep", { kept: $("keep").checked }));
 $("newSame").addEventListener("click", async () => { await send("newSame"); window.close(); });
 $("newIsolated").addEventListener("click", async () => { await send("newIsolated"); window.close(); });
-$("auto").addEventListener("change", () => send("setAuto", { auto: $("auto").checked }));
+$("auto").addEventListener("change", () => send("setSetting", { key: "auto", value: $("auto").checked }));
 $("help").addEventListener("click", (e) => {
   e.preventDefault();
   browser.runtime.openOptionsPage();

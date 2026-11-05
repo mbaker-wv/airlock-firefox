@@ -1,11 +1,20 @@
 # Changelog
 
-## 1.0.1
+## 1.1.0
 
 - **New name: Hatrack** (was Airlock), with a new top-hat icon. Sessions are now called "hats".
-- Friendlier, plainer wording on the welcome and setup page.
-- The setup tip now applies to any website, not just one vendor's tools.
+- **Open Link in New Hat:** right-click any link to open it signed out, or as a different account.
+- **The toolbar button shows your current hat**: its number or initials, in its color.
+- **A short wait before erasing** (2 minutes by default, adjustable or immediate), so a tab you
+  closed by accident can be reopened with ⇧⌘T still signed in.
+- **Hat numbers are reused**, so they stay small instead of counting up forever.
+- **Fewer permissions:** "access your data for all websites" is now only requested if you turn on
+  "links from other apps" on the setup page. Turning it off gives the permission back.
+- **Works alongside Multi-Account Containers:** leave "links from other apps" off if you use its
+  "Always open this site in…" feature.
+- **Fix:** a link opened from another app could also leave an extra empty tab behind.
 - Requires Firefox 140 or newer, the first version that understands Hatrack's "collects no data" declaration.
+- Friendlier, plainer wording on the welcome and setup page.
 
 ## 1.0.0
 

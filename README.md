@@ -4,7 +4,7 @@
 
 Hatrack is a Firefox add-on. Every new tab gets its own private session, a "hat",
 with its own logins. Sign into one account in this tab and a different one in the next,
-and they'll never see each other. Close the tab and that login is gone.
+and they'll never see each other. Close the tab and that login is gone, a couple of minutes later.
 
 [**Get Hatrack from Firefox Add-ons →**](https://addons.mozilla.org/firefox/addon/hatrack/)
 
@@ -25,20 +25,23 @@ Hatrack gives every tab a clean slate, so you decide which account goes where.
 
 | Do this | What happens |
 |---|---|
-| Press **⌘T** (Mac) or **Ctrl+T** (Windows/Linux) | A new tab with a fresh, signed-out session |
-| Press **⌥⌘T** (Mac) or **Ctrl+Alt+T** | A new tab in the *same* session, already signed in |
-| Right-click a tab | Choose "New Tab in This Hat" or "New Tab in a New Hat" |
+| Press **⌘T** (Mac) or **Ctrl+T** (Windows/Linux) | A new tab in a new hat: fresh and signed out |
+| Press **⌥⌘T** (Mac) or **Ctrl+Alt+T** | A new tab in the *same* hat, already signed in |
+| Right-click a link | "Open Link in New Hat", for a signed-out copy or a different account |
+| Right-click a tab | "New Tab in This Hat" or "New Tab in a New Hat" |
 | Click the Hatrack button in the toolbar | Rename the hat, keep it signed in, or forget it |
 
 **A few things worth knowing:**
 
-- **Each session has its own color**, shown under its tabs and in the address bar. Give it a
-  name like "Work" or "Client A" from the toolbar button.
-- **Closing a session's last tab erases it**: its cookies, logins and saved site data.
+- **Each hat has its own color**, shown under its tabs, in the address bar, and on the Hatrack
+  button (as its number or initials). Give it a name like "Work" or "Client A" from the toolbar button.
+- **Closing a hat's last tab erases it**: its cookies, logins and saved site data. By default it
+  waits 2 minutes first, so you can reopen a tab you closed by accident (⇧⌘T) still signed in.
+  You can change the wait, or make it immediate, on the setup page.
 - **Want to stay signed in to an account you use every day?** Tick **Keep** in the toolbar
   button. It stays until you click **Forget**.
-- **Links from other apps** (email, chat, documents) open in a new session, not in
-  whatever you were last signed into.
+- **Links from other apps** (email, chat, documents) can open in a new hat instead of
+  whatever you were last signed into. This is optional: switch it on from the setup page.
 - **Prefer to choose when to use it?** Turn off "Give every new tab its own hat" in the
   toolbar button. Then normal tabs stay normal, and you open Hatrack tabs when you want them.
 
@@ -58,7 +61,7 @@ password on another account's page.
 ## Privacy
 
 **Hatrack doesn't collect anything.** No analytics, no tracking, and it never connects to
-the internet by itself. Everything it remembers (which sessions are yours, their names,
+the internet by itself. Everything it remembers (which hats are yours, their names,
 which ones you kept) stays inside your own Firefox.
 
 Firefox shows a list of permissions when you install an add-on. Here's what each one is for,
@@ -66,10 +69,10 @@ in plain terms:
 
 | Firefox says Hatrack can… | Why it needs that |
 |---|---|
-| Access your data for all websites | To catch a page *before* it loads in Firefox's shared session and open it in its own hat instead. Hatrack doesn't read or change the pages themselves. |
-| Clear recent browsing history, cookies, and related data | To erase a session's logins when you close it, and only for sessions Hatrack created. |
+| Clear recent browsing history, cookies, and related data | To erase a hat's logins when you close it, and only for hats Hatrack created. |
 | Read and modify privacy settings | To keep Firefox's password saving turned off. |
-| Access browser tabs | To open new tabs in the right session. |
+| Access browser tabs | To open new tabs in the right hat. |
+| Access your data for all websites *(only if you turn on "links from other apps")* | To catch a page *before* it loads in Firefox's shared session and open it in its own hat instead. Hatrack doesn't read or change the pages themselves. Turn the option off and Hatrack gives this permission back. |
 
 The full source code is right here in this repository: plain, readable JavaScript with no
 hidden or compressed code.
@@ -116,6 +119,7 @@ It stays loaded until Firefox quits.
 | `icons/` | Store icon and toolbar icons (light and dark) |
 | `store/` | Store screenshots (also used in this README) |
 | `tools/` | Scripts that draw the icons and screenshots (not part of the add-on) |
+| `tests/` | Behavior tests, run by GitHub on every change: `node tests/run.js` (not part of the add-on) |
 
 ### Releasing a new version (maintainer only)
 

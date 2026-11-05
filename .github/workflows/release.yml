@@ -1,4 +1,4 @@
-# Release: push a tag like v1.0.1 (matching "version" in manifest.json).
+# Release: push a tag like v1.1.0 (matching "version" in manifest.json).
 # This lints, sends the new version to addons.mozilla.org for review and signing,
 # and attaches the package to a GitHub release. Users get it automatically once
 # Mozilla approves it.
@@ -31,17 +31,20 @@ jobs:
             exit 1
           fi
 
+      - name: Behavior tests
+        run: node tests/run.js
+
       - name: Lint
-        run: npx --yes web-ext@8 lint --source-dir . --ignore-files "tools/**" "*.md"
+        run: npx --yes web-ext@8 lint --source-dir . --ignore-files "tools/**" "tests/**" "*.md"
 
       - name: Build package
-        run: npx --yes web-ext@8 build --source-dir . --ignore-files "tools/**" "*.md" --artifacts-dir web-ext-artifacts --overwrite-dest
+        run: npx --yes web-ext@8 build --source-dir . --ignore-files "tools/**" "tests/**" "*.md" --artifacts-dir web-ext-artifacts --overwrite-dest
 
       - name: Submit to addons.mozilla.org for signing
         env:
           WEB_EXT_API_KEY: ${{ secrets.AMO_JWT_ISSUER }}
           WEB_EXT_API_SECRET: ${{ secrets.AMO_JWT_SECRET }}
-        run: npx --yes web-ext@8 sign --source-dir . --ignore-files "tools/**" "*.md" --channel listed --artifacts-dir web-ext-artifacts --approval-timeout 0
+        run: npx --yes web-ext@8 sign --source-dir . --ignore-files "tools/**" "tests/**" "*.md" --channel listed --artifacts-dir web-ext-artifacts --approval-timeout 0
 
       - name: GitHub release
         env:

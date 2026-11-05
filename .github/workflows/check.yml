@@ -1,5 +1,5 @@
-# Runs Mozilla's add-on linter on every push and pull request,
-# so problems Mozilla's review would flag show up here first.
+# Runs Hatrack's behavior tests and Mozilla's add-on linter on every push and pull
+# request, so problems show up here before they reach Mozilla's review or users.
 name: Check
 
 on:
@@ -20,5 +20,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Behavior tests
+        run: node tests/run.js
       - name: Lint with web-ext
-        run: npx --yes web-ext@8 lint --source-dir . --ignore-files "tools/**" "*.md"
+        run: npx --yes web-ext@8 lint --source-dir . --ignore-files "tools/**" "tests/**" "*.md"
